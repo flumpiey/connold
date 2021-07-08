@@ -12,6 +12,7 @@ module.exports = {
         url: process.env.WPGRAPHQL_URL || `https://www.connold.co.za/graphql`,
       },
     },
+    `gatsby-plugin-postcss`,
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-image`,
     {

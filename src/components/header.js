@@ -1,7 +1,6 @@
 import * as React from "react"
 import PropTypes from "prop-types"
 import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
 
 const Header = ({ siteTitle }) => (
   <header ClassName="absolute top-0 left-0 z-50 w-full px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64">
