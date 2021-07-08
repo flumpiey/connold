@@ -17,7 +17,7 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `)
-    const postTemplate = path.resolve(`./src/templates/post.js`)
+    const postTemplate = path.resolve(`./src/templates/post/WpPost.js`)
     allPosts.forEach(post => {
         createPage({
             // will be the url for the page
