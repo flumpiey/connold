@@ -1,92 +1,81 @@
-import * as React from "react"
-import PropTypes from "prop-types"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+import React from "react"
+import { graphql, Link, useStaticQuery } from "gatsby"
+import Menu from "./Menu"
+import ToggleIcon from "../assets/svg/toggle.inline.svg"
 
-const Header = ({ siteTitle }) => (
-  <header ClassName="absolute top-0 left-0 z-50 w-full px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64">
-    <div class="items-center">
-      <div class="text-blueGray-700 transition duration-500 ease-in-out transform bg-white border rounded-lg ">
-        <div class="flex flex-col flex-wrap p-5 mx-auto md:items-center md:flex-row">
-          <a href="/" class="pr-2 lg:pr-8 lg:px-6 focus:outline-none">
-            <div class="inline-flex items-center">
-              <StaticImage
-                src="../images/logo.png"
-                width={300}
-                      quality={95}
-                      formats={["AUTO", "WEBP", "AVIF"]}
-                      alt="A Gatsby astronaut"
+const Header = ({ pageContext, toggleBackdrop, ...props }) => {
+  const { wp } = useStaticQuery(graphql`
+    {
+      wp {
+        generalSettings {
+          title
+          description
+        }
+      }
+    }
+  `)
+  return (
+    <header id="site-header" className="header-footer-group" role="banner">
+      <div className="header-inner section-inner">
+        <div className="header-titles-wrapper">
+          <div className="header-titles">
+            <h1 className="site-title">
+              <Link
+                to="/"
+                dangerouslySetInnerHTML={{ __html: wp.generalSettings.title }}
               />
-            </div>
-          </a>
-          <nav class="flex flex-wrap items-center justify-left text-base md:ml-auto md:mr-auto">
-            <ul class="items-center inline-block list-none lg:inline-flex">
-              <li>
-                <a
-                  href="#"
-                  class="px-4 py-1 mr-1 text-base text-blueGray-500 transition duration-500 ease-in-out transform rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:text-black "
-                >
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="px-4 py-1 mr-1 text-base text-blueGray-500 transition duration-500 ease-in-out transform rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:text-black "
-                >
-                  Contact
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="px-4 py-1 mr-1 text-base text-blueGray-500 transition duration-500 ease-in-out transform rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:text-black "
-                >
-                  Services
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="px-4 py-1 mr-1 text-base text-blueGray-500 transition duration-500 ease-in-out transform rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:text-black "
-                >
-                  Now
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <button class="w-auto px-8 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform bg-blue-600 border-blue-600 rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:b-gblue-700 ">
-            Contact Us
+            </h1>
+            <div
+              className="site-description"
+              dangerouslySetInnerHTML={{
+                __html: wp.generalSettings.description,
+              }}
+            />
+          </div>
+
+          <button
+            className="toggle nav-toggle mobile-nav-toggle"
+            data-toggle-target=".menu-modal"
+            data-toggle-body-class="showing-menu-modal"
+            aria-expanded="false"
+            data-set-focus=".close-nav-toggle"
+            onClick={(e) => toggleBackdrop(e, true)}
+          >
+            <span className="toggle-inner">
+              <span className="toggle-icon">
+                <ToggleIcon />
+              </span>
+              <span className="toggle-text">Menu</span>
+            </span>
           </button>
         </div>
+
+        <div className="header-navigation-wrapper">
+          <Menu />
+
+          <div className="header-toggles hide-no-js">
+            <div className="toggle-wrapper nav-toggle-wrapper has-expanded-menu">
+              <button
+                className="toggle nav-toggle desktop-nav-toggle"
+                data-toggle-target=".menu-modal"
+                data-toggle-body-class="showing-menu-modal"
+                aria-expanded="false"
+                data-set-focus=".close-nav-toggle"
+                onClick={(e) => toggleBackdrop(e, true)}
+              >
+                <span className="toggle-inner">
+                  <span className="toggle-text">Menu</span>
+                  <span className="toggle-icon">
+                    <ToggleIcon />
+                  </span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </header>
-
-  // <header className="mb-6 bg-blue-800">
-  //   <div className="max-w-[960px] px-4 py-6 mx-auto my-0">
-  //     <h1 className="text-4xl font-bold">
-  //      <Link
-  //         to="/"
-  //         className="text-white no-underline"
-  //         style={{
-  //           color: `white`,
-  //           textDecoration: `none`,
-  //         }}
-  //       >
-  //         {siteTitle}
-  //       </Link>
-  //     </h1>
-  //   </div>
-  //   </header>
-)
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: ``,
+    </header>
+  )
 }
 
 export default Header

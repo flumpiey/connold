@@ -1,50 +1,41 @@
 {
-  "name": "gatsby-starter-default",
-  "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "name": "gatsby-starter-wordpress-twenty-twenty",
+  "description": "Gatsby port of the WordPress Twenty Twenty theme.",
+  "license": "SEE LICENSE IN <LICENSE>",
+  "version": "0.0.1",
+  "author": {
+    "name": "Henrik Wirth",
+    "email": "info@henrikwirth.de"
+  },
+  "scripts": {
+    "develop": "gatsby develop",
+    "clean": "gatsby clean",
+    "build": "gatsby build",
+    "cdev": "gatsby clean && gatsby develop",
+    "cbuild": "gatsby clean && gatsby build",
+    "start": "npm run develop",
+    "serve": "gatsby serve"
+  },
   "dependencies": {
-    "autoprefixer": "^10.2.6",
-    "gatsby": "^3.8.1",
-    "gatsby-plugin-gatsby-cloud": "^2.8.1",
-    "gatsby-plugin-image": "^1.8.0",
-    "gatsby-plugin-manifest": "^3.8.0",
-    "gatsby-plugin-offline": "^4.8.0",
+    "autoprefixer": "^10.3.1",
+    "dotenv": "^10.0.0",
+    "gatsby": "^3.9.1",
+    "gatsby-plugin-image": "^1.9.0",
+    "gatsby-plugin-notifications": "^0.0.2",
     "gatsby-plugin-postcss": "^4.9.0",
-    "gatsby-plugin-react-helmet": "^4.8.0",
-    "gatsby-plugin-sharp": "^3.8.0",
-    "gatsby-source-filesystem": "^3.8.0",
-    "gatsby-source-wordpress": "^5.9.0",
-    "gatsby-transformer-sharp": "^3.8.0",
+    "gatsby-plugin-react-svg": "^3.0.1",
+    "gatsby-plugin-sharp": "^3.9.0",
+    "gatsby-source-filesystem": "^3.9.0",
+    "gatsby-source-wordpress": "^5.9.2",
+    "gatsby-transformer-sharp": "^3.9.0",
     "postcss": "^8.2.6",
     "prop-types": "^15.7.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "tailwindcss": "^2.2.4"
   },
   "devDependencies": {
-    "prettier": "2.2.1"
-  },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "0BSD",
-  "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "npm run develop",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "prettier": "^2.3.0"
   }
 }

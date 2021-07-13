@@ -1,46 +1,42 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
+import React, { useState } from "react"
+import Header from "./Header"
+import Footer from "./Footer"
 
- import * as React from "react"
- import PropTypes from "prop-types"
- import { useStaticQuery, graphql } from "gatsby"
- 
- import Header from "./header"
- import "../styles/main.css"
- 
- const Layout = ({ children }) => {
-   const data = useStaticQuery(graphql`
-     query SiteTitleQuery {
-       site {
-         siteMetadata {
-           title
-         }
-       }
-     }
-   `)
- 
-   return (
-     <>
-       <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-       <div className="my-0 mx-auto max-w-[960px] pt-0 px-4 pb-6">
-         <main>{children}</main>
-         <footer className="mt-8">
-           © {new Date().getFullYear()}, Built with
-           {` `}
-           <a href="https://www.gatsbyjs.com">Gatsby</a>
-         </footer>
-       </div>
-     </>
-   )
- }
- 
- Layout.propTypes = {
-   children: PropTypes.node.isRequired,
- }
- 
- export default Layout
- 
+import FooterMenusWidgets from "./FooterMenusWidgets"
+import MenuModal from "./MenuModal"
+
+const backdropClasses = " backdrop"
+
+const Layout = ({ children, bodyClass }) => {
+  const [backdropActive, setBackdropActive] = useState(false)
+
+  const toggleBackdrop = (e, active) => {
+    e.preventDefault()
+    setBackdropActive(active)
+  }
+
+  return (
+    <div
+      id={"GatsbyBody"}
+      className={
+        bodyClass +
+        " showing-menu-modal showing-modal" +
+        (backdropActive ? backdropClasses : "")
+      }
+    >
+      <Header toggleBackdrop={toggleBackdrop} />
+
+      <MenuModal isActive={backdropActive} toggleBackdrop={toggleBackdrop} />
+
+      <main id="site-content" role="main">
+        {children}
+      </main>
+
+      <FooterMenusWidgets />
+
+      <Footer />
+    </div>
+  )
+}
+
+export default Layout

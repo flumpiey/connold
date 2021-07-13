@@ -1,49 +1,83 @@
+require("dotenv").config({
+  path: `.env`,
+})
+
+// require .env.development or .env.production
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
-    siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
+    title: `Gatsby WordPress Twenty Twenty`,
+    description: `Gatsby starter site for Twenty Twenty Gatsby Theme.`,
+    author: `@henrikwirth`,
+    siteUrl: process.env.SITE_URL,
   },
   plugins: [
+    `gatsby-plugin-image`,
+    `gatsby-plugin-notifications`,
+    `gatsby-plugin-sharp`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/src/assets/images`,
+
+      },
+    },
     {
       resolve: `gatsby-source-wordpress`,
       options: {
-        url: process.env.WPGRAPHQL_URL || `https://www.connold.co.za/graphql`,
+        url: process.env.WPGRAPHQL_URL,
+        verbose: true,
         schema: {
           perPage: 20, // currently set to 100
           requestConcurrency: 5, // currently set to 15
           previewRequestConcurrency: 2, // currently set to 5
         },
-      },
-    },
-    `gatsby-plugin-postcss`,
-    `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-image`,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
+        develop: {
+          hardCacheMediaFiles: true,
+        },
+        debug: {
+          graphql: {
+            writeQueriesToDisk: true,
+          },
+        },
+        html: {
+          fallbackImageMaxWidth: 800,
+        },
+        // fields can be excluded globally.
+        // this example is for wp-graphql-gutenberg.
+        // since we can get block data on the `block` field
+        // we don't need these fields
+        excludeFieldNames: [`blocksJSON`, `saveContent`],
+        type: {
+          Post: {
+            limit:
+              process.env.NODE_ENV === `development`
+                ? // Lets just pull 50 posts in development to make it easy on ourselves.
+                35
+                : // And then we can pull all posts in production
+                null,
+          },
+          // this shows how to exclude entire types from the schema
+          // this example is for wp-graphql-gutenberg
+          CoreParagraphBlockAttributesV2: {
+            exclude: true,
+          },
+        },
       },
     },
     `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
+    'gatsby-plugin-postcss',
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: "gatsby-plugin-react-svg",
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
-        start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        rule: {
+          include: /\.inline\.svg$/, // See below to configure properly
+        },
       },
     },
-    `gatsby-plugin-gatsby-cloud`,
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
   ],
 }

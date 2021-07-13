@@ -1,34 +1,67 @@
 const path = require(`path`)
-const { slash } = require(`gatsby-core-utils`)
-exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions
-  // query content for WordPress posts
-  const {
-    data: {
-      allWpPost: { nodes: allPosts },
-    },
-  } = await graphql(`
-    query {
-      allWpPost {
-        nodes {
-          id
-          uri
+const glob = require(`glob`)
+
+const createBlog = require(`./create/createBlog`)
+const createContentTypes = require(`./create/createContentTypes`)
+const createCategories = require(`./create/createCategories`)
+const createAuthors = require(`./create/createAuthors`)
+
+const getTemplates = () => {
+  const sitePath = path.resolve(`./`)
+  return glob.sync(`./src/templates/**/*.js`, { cwd: sitePath })
+}
+
+exports.createPages = async (props) => {
+  const { data: wpSettings } = await props.graphql(/* GraphQL */ `
+    {
+      wp {
+        readingSettings {
+          postsPerPage
         }
       }
     }
   `)
-  const postTemplate = path.resolve(`src/templates/post/WpPost.js`)
-  allPosts.forEach(post => {
-    createPage({
-      // will be the url for the page
-      path: post.uri,
-      // specify the component template of your choice
-      component: path.resolve('./src/templates/post/WpPost.js'),
-      // In the ^template's GraphQL query, 'id' will be available
-      // as a GraphQL variable to query for this post's data.
-      context: {
-        id: post.id,
+
+  const perPage = wpSettings.wp.readingSettings.postsPerPage || 10
+  const blogURI = "/"
+  const templates = getTemplates()
+
+  await createContentTypes(props, { templates })
+  await createBlog(props, { perPage, blogURI })
+  await createCategories(props, { perPage })
+  await createAuthors(props, { perPage })
+}
+
+const { createRemoteFileNode } = require(`gatsby-source-filesystem`)
+
+// We do this, because the Avatar doesn't get handled as a File from the gatsby-source plugin yet. This might change in the future.
+exports.createResolvers = async ({
+  actions,
+  cache,
+  createNodeId,
+  createResolvers,
+  store,
+  reporter,
+}) => {
+  const { createNode } = actions
+
+  await createResolvers({
+    WpAvatar: {
+      imageFile: {
+        type: "File",
+        async resolve(source) {
+          let sourceUrl = source.url
+
+          return await createRemoteFileNode({
+            url: encodeURI(sourceUrl),
+            store,
+            cache,
+            createNode,
+            createNodeId,
+            reporter,
+          })
+        },
       },
-    })
+    },
   })
 }
