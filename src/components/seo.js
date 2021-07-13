@@ -150,7 +150,7 @@ const detailsQuery = graphql`
         title
         description
         author
-        siteUrl
+        # siteUrl
       }
     }
     wp {
