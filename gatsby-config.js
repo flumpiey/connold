@@ -29,7 +29,7 @@ module.exports = {
     {
       resolve: `gatsby-source-wordpress`,
       options: {
-        url: process.env.WPGRAPHQL_URL,
+        url: 'https://www.connold.co.za/graphql',
         verbose: true,
         schema: {
           perPage: 20, // currently set to 100
